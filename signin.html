@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In Page</title>
+  <link rel="stylesheet" href="signin.css">
+</head>
+<body>
+  <div class="signin-container">
+    <h2 class="signin-title">Sign In to Your Account</h2>
+    
+    <form id="signin-form" class="signin-form">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" placeholder="Enter your username" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+      <button type="submit" class="signin-button">Sign In</button>
+    </form>
+  </div>
+
+  <script>
+    document.querySelector('#signin-form').addEventListener('submit', async (event) => {
+      event.preventDefault(); // Prevents page reload
+
+      const formData = {
+        username: document.querySelector('#username').value,
+        password: document.querySelector('#password').value
+      };
+
+      try {
+        const response = await fetch('http://localhost:2000/signin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        try {
+          if (!response.ok) {
+            throw new Error(`Login failed. Status: ${response.status}`);
+          }
+        } catch (error) {
+          alert(error.message);
+        }
+        
+
+        const result = await response.json();
+        alert(`Login successful: ${result.message}`);
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+  </script>
+</body>
+</html>
